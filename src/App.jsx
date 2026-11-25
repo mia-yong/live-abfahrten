@@ -53,7 +53,17 @@ export default function App() {
 
       {rows.map((r, i) => (
         <div key={i}>
-          <PixelVehicleIcon type={r.type}/> {r.line} / {r.direction} / {r.minutes === 0 ? 'Sofort' : `${r.minutes}'`}  
+          <PixelVehicleIcon type={r.type}/>
+            <span // 오른쪽 정렬
+              style={{
+                display: 'inline-block',
+                width: '40px',
+                textAlign: 'right',
+              }}
+            >
+              {r.line}
+            </span>
+          {'\u00A0'.repeat(2)}{r.direction}{'\u00A0'.repeat(4)}{r.minutes === 0 ? 'Sofort' : `${r.minutes}'`}  
         </div>
       ))}
     </div>
