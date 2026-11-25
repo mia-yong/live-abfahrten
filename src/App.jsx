@@ -2,14 +2,19 @@ import { useEffect, useState } from 'react';
 import { getDepartures } from './services/transitService';
 import PixelVehicleIcon from './components/PixelVehicleIcon';
 
-const REFRESH_INTERVAL_MS = 30_000; // 30초마다 갱신 (필요에 따라 조절)
+const REFRESH_INTERVAL_MS = 600_000; // 전체 리스트 60초마다 갱신 (필요에 따라 조절)
+const PAGE_SIZE = 5; // 한 화면에 보여줄 개수
+const PAGE_INTERVAL_MS = 7_000; // 7초마다 다음 5개로 전환
+const MAX_MINUTES = 15; // 15분 이내 출발만 표시
 
 export default function App() {
   const [rows, setRows] = useState([]); // 출발 시간표 초기화
   const [lastUpdated, setLastUpdated] = useState(null); // 업데이트 시간 초기화 
   const [error, setError] = useState(null); // 에러상태 초기화
+  const [pageIndex, setPageIndex] = useState(0); // 현재 5개 묶음 번호 (0부터 시작)
 
-  const station = 'Essen Hbf'; // 검색할 정류장 이름
+  //const station = 'Essen Hbf'; // 검색할 정류장 이름
+  const station = 'Essen Onckenstr.'; // 검색할 정류장 이름
 
   useEffect(() => {
     let cancelled = false;
@@ -19,6 +24,7 @@ export default function App() {
         const data = await getDepartures('essen', station);
         if (!cancelled) {
           setRows(data);
+          setPageIndex(0); // 새 데이터 오면 첫 페이지부터 시작
           setLastUpdated(new Date());
           setError(null);
         }
@@ -43,6 +49,29 @@ export default function App() {
     };
   }, [station]); // station 바뀔때마다 바뀐 station 이름으로 즉시 새 데이터가져오도록 의존성 추가
 
+  // 15분 이내 시간표만 Filtering
+    const filteredRows = rows.filter(
+      (r) => typeof r.minutes === 'number' && r.minutes >= 0 && r.minutes <= MAX_MINUTES
+    );
+    const pageCount = Math.floor((filteredRows.length + PAGE_SIZE - 1) / PAGE_SIZE);
+
+    useEffect(() => {
+      if (pageCount <= 1) {
+        setPageIndex(0);
+        return;
+      }
+
+      const pageTimer = setInterval(() => {
+        setPageIndex((prev) => (prev + 1) % pageCount);
+      }, PAGE_INTERVAL_MS);
+
+      return () => clearInterval(pageTimer);
+    }, [pageCount]);
+
+    const safePageIndex = pageCount === 0 ? 0 : pageIndex % pageCount;
+    const start = safePageIndex * PAGE_SIZE;
+    const visibleRows = filteredRows.slice(start, start + PAGE_SIZE);
+
   return (
     <div>
       <h1>{station}</h1>
@@ -64,7 +93,7 @@ export default function App() {
         }}
       >
 
-        {rows.slice(0, 5).map((r, i) => (
+        {visibleRows.slice(0, 5).map((r, i) => (
           <div key={i}>
             <PixelVehicleIcon type={r.type}/>
               <span // 오른쪽 정렬
