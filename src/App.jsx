@@ -51,21 +51,56 @@ export default function App() {
       )}
       {error && <p>{error}</p>}
 
-      {rows.map((r, i) => (
-        <div key={i}>
-          <PixelVehicleIcon type={r.type}/>
-            <span // 오른쪽 정렬
+      <div
+        style={{
+          width: '12cm', // 임시 테두리 크기
+          height: '4cm',
+          boxSizing: 'border-box',
+          overflow: 'hidden',
+          padding: '8px',
+          border: '1px solid #ffffff', // 화면에서 12x7cm 경계 잘 보이게 임시 테두리
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+
+        {rows.slice(0, 5).map((r, i) => (
+          <div key={i}>
+            <PixelVehicleIcon type={r.type}/>
+              <span // 오른쪽 정렬
+                style={{
+                  display: 'inline-block',
+                  width: '40px',
+                  textAlign: 'right',
+                }}
+              >
+                {r.line}
+              </span>
+            {'\u00A0'.repeat(2)}
+            <span // 목적지가 고정 가로폭이 있어야 출발시간도 왼쪽 정렬이 먹힘
               style={{
                 display: 'inline-block',
-                width: '40px',
-                textAlign: 'right',
+                width: '230px', // 내용이 고정폭 벗어날때 애니메이션 효과 주어야 함
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                verticalAlign: 'middle',
               }}
             >
-              {r.line}
+              {r.direction}
             </span>
-          {'\u00A0'.repeat(2)}{r.direction}{'\u00A0'.repeat(4)}{r.minutes === 0 ? 'Sofort' : `${r.minutes}'`}  
-        </div>
-      ))}
+            {'\u00A0'.repeat(4)}
+            <span // 왼쪽 정렬
+                style={{
+                display: 'inline-block',
+                width: '40px',
+                textAlign: 'left',
+              }}
+              >
+            {r.minutes === 0 ? 'Sofort' : `${r.minutes}'`} 
+            </span> 
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
