@@ -14,7 +14,8 @@ export default function App() {
   const [pageIndex, setPageIndex] = useState(0); // 현재 5개 묶음 번호 (0부터 시작)
 
   //const station = 'Essen Hbf'; // 검색할 정류장 이름
-  const station = 'Essen Onckenstr.'; // 검색할 정류장 이름
+  //const station = 'Essen Onckenstr.'; // 검색할 정류장 이름
+  const station = 'Essen Uniklinikum'; // 검색할 정류장 이름
 
   useEffect(() => {
     let cancelled = false;
