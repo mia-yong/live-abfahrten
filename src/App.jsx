@@ -80,7 +80,87 @@ export default function App() {
         <p>Last updated: {lastUpdated.toLocaleTimeString()}</p>
       )}
       {error && <p>{error}</p>}
+      {/* 검색창 */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+          margin: '16px 0',
+        }}
+      >
+        <input
+          type="text"
+          placeholder="Station Name..."
+          style={{
+            width: '220px',
+            height: '38px',
+            boxSizing: 'border-box',
+            padding: '0 12px',
 
+            border: '1px solid #555',
+            borderRadius: '6px',
+
+            backgroundColor: '#111',
+            color: '#ffffff',
+
+            font: 'DotGothic16',
+            fontSize: '14px',
+            outline: 'none',
+          }}
+        />
+        <button
+          style={{
+            height: '38px',
+            padding: '0 18px',
+
+            border: '1px solid #555',
+            borderRadius: '6px',
+
+            backgroundColor: '#111',
+            color: '#ffffff',
+
+            font: 'DotGothic16',
+            fontSize: '14px',
+            fontWeight: '800',
+
+            cursor: 'pointer',
+          }}
+        >
+          find
+        </button>
+      </div>
+      {/* 정류장 선택 드롭다운 */}
+      <div>
+        <select
+          defaultValue=""
+          style={{
+            width: '220px',
+            height: '38px',
+            boxSizing: 'border-box',
+            padding: '0 12px',
+
+            border: '1px solid #555',
+            borderRadius: '6px',
+
+            backgroundColor: '#111',
+            color: '#ffffff',
+
+            font: 'inherit',
+            fontSize: '14px',
+            outline: 'none',
+            color: '#ffffff',
+
+          }}
+        >
+          <option value="" disabled>Select your station</option>
+          <option value="1">항목 1</option>
+          <option value="2">항목 2</option>
+          <option value="3">항목 3</option>
+        </select>
+      </div>
+
+      <br></br>
       <div
         style={{
           width: '12cm', // 임시 테두리 크기
