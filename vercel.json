@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/vrr/:path*",
+      "destination": "https://openservice.vrr.de/openservice/:path*"
+    }
+  ]
+}
