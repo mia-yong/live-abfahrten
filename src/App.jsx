@@ -111,7 +111,7 @@ export default function App() {
         lineHeight: 1.2,
         margin: '0 0 12px 0',
         }}
-      >Wann kommt Der denn?</h1>
+      >🚅 Wann kommt Der denn?</h1>
       {/* 검색창 */}
       <div
         style={{
@@ -133,7 +133,7 @@ export default function App() {
           }}
         />
        <button type="button" style={buttonStyle}>
-          find
+          🔍
         </button>
       </div>
       {/* 정류장 선택 드롭다운 */}
@@ -147,7 +147,7 @@ export default function App() {
         }}
       >
         <select
-          defaultValue=""
+          defaultValue="1"
           style={{
             ...controlStyle,
             flex: 1,
@@ -156,12 +156,12 @@ export default function App() {
           }}
         >
           <option value="" disabled>Select your station</option>
-          <option value="1">항목 1</option>
-          <option value="2">항목 2</option>
-          <option value="3">항목 3</option>
+          <option value="1">Essen Altenessen Bf</option>
+          <option value="2">Essen Onckenstr.</option>
+          <option value="3">Essen Uniklinikum</option>
         </select>
         <button type="button" style={buttonStyle}>
-          find
+          📍
         </button>
       </div>
 
