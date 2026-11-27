@@ -34,16 +34,29 @@ export default function App() {
   const [error, setError] = useState(null); // 에러상태 초기화
   const [pageIndex, setPageIndex] = useState(0); // 현재 5개 묶음 번호 (0부터 시작)
 
-  const station = 'Essen Altenessen Bf'; // 검색할 정류장 이름
+  const DEFAULT_STATION = 'Essen Altenessen Bf'; // 검색할 정류장 이름
   //const station = 'Essen Onckenstr.'; // 검색할 정류장 이름
   //const station = 'Essen Uniklinikum'; // 검색할 정류장 이름
+
+  const [selectedStation, setSelectedStation] = useState(DEFAULT_STATION);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const getValuefromSerach = (searchStation) => {
+    if (!searchStation || searchStation.trim().length === 0){
+      alert("제대로 쳐라ㅡㅡ");
+      return
+    } else {
+      setSelectedStation(searchStation); // ✅ state 변경 함수로 값 갱신 -> useEffect 자동 실행
+      alert(searchStation);
+    }
+  };
 
   useEffect(() => {
     let cancelled = false;
 
     async function load() {
       try {
-        const data = await getDepartures('essen', station);
+        const data = await getDepartures('essen', selectedStation ?? DEFAULT_STATION);
         if (!cancelled) {
           setRows(data);
           setPageIndex(0); // 새 데이터 오면 첫 페이지부터 시작
@@ -69,7 +82,7 @@ export default function App() {
       cancelled = true;
       clearInterval(timerId);
     };
-  }, [station]); // station 바뀔때마다 바뀐 station 이름으로 즉시 새 데이터가져오도록 의존성 추가
+  }, [selectedStation]); // station 바뀔때마다 바뀐 station 이름으로 즉시 새 데이터가져오도록 의존성 추가
 
   // 15분 이내 시간표만 Filtering
     const filteredRows = rows.filter(
@@ -124,7 +137,9 @@ export default function App() {
       >
         <input
           type="text"
-          placeholder="Station Name..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="z.B. Essen Hbf"
           style={{
            ...controlStyle,
             flex: 1,
@@ -132,7 +147,7 @@ export default function App() {
             padding: '0 12px',
           }}
         />
-       <button type="button" style={buttonStyle}>
+       <button type="button" style={buttonStyle} onClick={() => getValuefromSerach(searchQuery)}>
           🔍
         </button>
       </div>
@@ -147,7 +162,7 @@ export default function App() {
         }}
       >
         <select
-          defaultValue="1"
+          defaultValue=""
           style={{
             ...controlStyle,
             flex: 1,
@@ -156,9 +171,9 @@ export default function App() {
           }}
         >
           <option value="" disabled>Select your station</option>
-          <option value="1">Essen Altenessen Bf</option>
-          <option value="2">Essen Onckenstr.</option>
-          <option value="3">Essen Uniklinikum</option>
+          <option value="1">Essen Altenessen Bf (150m)</option>
+          <option value="2">Essen Onckenstr. (450m)</option>
+          <option value="3">Essen Uniklinikum (834m)</option>
         </select>
         <button type="button" style={buttonStyle}>
           📍
@@ -167,7 +182,7 @@ export default function App() {
 
       <br/>
 
-      <h2>{station}</h2>
+      <h2>{selectedStation}</h2>
       {lastUpdated && (
         <p style={{ fontSize: '15px', margin: '0 0 6px 0' }}>Last updated: {lastUpdated.toLocaleTimeString()}</p>
       )}
