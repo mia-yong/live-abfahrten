@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getDepartures } from './services/transitService';
 import PixelVehicleIcon from './components/PixelVehicleIcon';
+import loadingSvg from './assets/loading-dot.svg';
 
 const REFRESH_INTERVAL_MS = 600_000; // 전체 리스트 60초마다 갱신 (필요에 따라 조절)
 const PAGE_SIZE = 5; // 한 화면에 보여줄 개수
@@ -42,6 +43,8 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchOption, setSearchOption] = useState('');
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const getValuefromSerach = (searchStation) => {
     if (!searchStation || searchStation.trim().length === 0){
       alert("제대로 쳐라ㅡㅡ");
@@ -59,6 +62,8 @@ export default function App() {
   useEffect(() => {
     let cancelled = false;
 
+    setIsLoading(true);
+
     async function load() {
       try {
         const data = await getDepartures('essen', selectedStation ?? DEFAULT_STATION);
@@ -72,6 +77,10 @@ export default function App() {
         if (!cancelled) {
           console.error('Failed to fetch departures:', err);
           setError('Unable to load live departures.');
+        }
+      } finally {
+        if (!cancelled) {
+          setIsLoading(false);
         }
       }
     }
@@ -211,7 +220,27 @@ export default function App() {
           fontSize: 'clamp(16px, 3.3vw, 13px)',
         }}
       >
-        {visibleRows.length === 0 ? (
+        {isLoading && visibleRows.length === 0 ? (
+          <div
+            style={{
+              flex: 1,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              textAlign: 'center',
+            }}
+          >
+            <img
+        src={loadingSvg}
+        alt="Loading..."
+        style={{
+          maxWidth: '100%',
+          maxHeight: '100%',
+          objectFit: 'contain',
+        }}
+      />
+          </div>
+        ) : visibleRows.length === 0 ? (
           <div
             style={{
               flex: 1,
