@@ -13,9 +13,9 @@ export default function App() {
   const [error, setError] = useState(null); // 에러상태 초기화
   const [pageIndex, setPageIndex] = useState(0); // 현재 5개 묶음 번호 (0부터 시작)
 
-  //const station = 'Essen Hbf'; // 검색할 정류장 이름
+  const station = 'Essen Altenessen Bf'; // 검색할 정류장 이름
   //const station = 'Essen Onckenstr.'; // 검색할 정류장 이름
-  const station = 'Essen Uniklinikum'; // 검색할 정류장 이름
+  //const station = 'Essen Uniklinikum'; // 검색할 정류장 이름
 
   useEffect(() => {
     let cancelled = false;
@@ -75,11 +75,7 @@ export default function App() {
 
   return (
     <div>
-      <h1>{station}</h1>
-      {lastUpdated && (
-        <p>Last updated: {lastUpdated.toLocaleTimeString()}</p>
-      )}
-      {error && <p>{error}</p>}
+      <h1>Wann kommt Der denn?</h1>
       {/* 검색창 */}
       <div
         style={{
@@ -160,7 +156,13 @@ export default function App() {
         </select>
       </div>
 
-      <br></br>
+      <br/>
+
+      <h2>{station}</h2>
+      {lastUpdated && (
+        <p>Last updated: {lastUpdated.toLocaleTimeString()}</p>
+      )}
+      {error && <p>{error}</p>}
       <div
         style={{
           width: '12cm', // 임시 테두리 크기
