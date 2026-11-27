@@ -71,7 +71,7 @@ export default function App() {
       } catch (err) {
         if (!cancelled) {
           console.error('Failed to fetch departures:', err);
-          setError('실시간 출발 정보를 불러오지 못했습니다.');
+          setError('Unable to load live departures.');
         }
       }
     }
@@ -111,7 +111,7 @@ export default function App() {
     const safePageIndex = pageCount === 0 ? 0 : pageIndex % pageCount;
     const start = safePageIndex * PAGE_SIZE;
     const visibleRows = filteredRows.slice(start, start + PAGE_SIZE);
-
+    
   return (
     <div
       style={{
@@ -211,8 +211,20 @@ export default function App() {
           fontSize: 'clamp(16px, 3.3vw, 13px)',
         }}
       >
-
-        {visibleRows.slice(0, 5).map((r, i) => (
+        {visibleRows.length === 0 ? (
+          <div
+            style={{
+              flex: 1,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              textAlign: 'center',
+            }}
+          >
+            {/* 에러가 없을 때만 '차량 없음' 문구 표시 */}
+            {!error && 'No departures available within 15 minutes 😴'}
+          </div>
+        ) : visibleRows.slice(0, 5).map((r, i) => (
           <div key={i}
             style={{
             height: '20%',
