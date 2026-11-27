@@ -7,15 +7,36 @@ const PAGE_SIZE = 5; // 한 화면에 보여줄 개수
 const PAGE_INTERVAL_MS = 7_000; // 7초마다 다음 5개로 전환
 const MAX_MINUTES = 15; // 15분 이내 출발만 표시
 
+const controlStyle = {
+  height: '38px',
+  boxSizing: 'border-box',
+  border: '1px solid #555',
+  borderRadius: '6px',
+  backgroundColor: '#111',
+  color: '#ffffff',
+  fontFamily: 'inherit',
+  fontSize: '15px',
+  outline: 'none',
+};
+
+const buttonStyle = {
+  ...controlStyle,
+  padding: '0 16px',
+  flexShrink: 0,
+  fontSize: '14px',
+  fontWeight: '800',
+  cursor: 'pointer',
+};
+
 export default function App() {
   const [rows, setRows] = useState([]); // 출발 시간표 초기화
   const [lastUpdated, setLastUpdated] = useState(null); // 업데이트 시간 초기화 
   const [error, setError] = useState(null); // 에러상태 초기화
   const [pageIndex, setPageIndex] = useState(0); // 현재 5개 묶음 번호 (0부터 시작)
 
-  //const station = 'Essen Altenessen Bf'; // 검색할 정류장 이름
+  const station = 'Essen Altenessen Bf'; // 검색할 정류장 이름
   //const station = 'Essen Onckenstr.'; // 검색할 정류장 이름
-  const station = 'Essen Uniklinikum'; // 검색할 정류장 이름
+  //const station = 'Essen Uniklinikum'; // 검색할 정류장 이름
 
   useEffect(() => {
     let cancelled = false;
@@ -74,79 +95,64 @@ export default function App() {
     const visibleRows = filteredRows.slice(start, start + PAGE_SIZE);
 
   return (
-    <div>
-      <h1>Wann kommt Der denn?</h1>
+    <div
+      style={{
+          width: '100%',
+          maxWidth: '420px',
+          margin: '0 auto',
+          padding:
+            'calc(12px + env(safe-area-inset-top)) 4px calc(20px + env(safe-area-inset-bottom))',
+          boxSizing: 'border-box',
+        }}
+        >
+      <h1
+        style={{
+        fontSize: 'clamp(1.35rem, 6vw, 1.85rem)',
+        lineHeight: 1.2,
+        margin: '0 0 12px 0',
+        }}
+      >Wann kommt Der denn?</h1>
       {/* 검색창 */}
       <div
         style={{
           display: 'flex',
           alignItems: 'center',
           gap: '8px',
-          margin: '16px 0',
+          margin: '12px 0',
+          width: '100%',
         }}
       >
         <input
           type="text"
           placeholder="Station Name..."
           style={{
-            width: '220px',
-            height: '38px',
-            boxSizing: 'border-box',
+           ...controlStyle,
+            flex: 1,
+            minWidth: 0,
             padding: '0 12px',
-
-            border: '1px solid #555',
-            borderRadius: '6px',
-
-            backgroundColor: '#111',
-            color: '#ffffff',
-
-            font: 'DotGothic16',
-            fontSize: '14px',
-            outline: 'none',
           }}
         />
-        <button
-          style={{
-            height: '38px',
-            padding: '0 18px',
-
-            border: '1px solid #555',
-            borderRadius: '6px',
-
-            backgroundColor: '#111',
-            color: '#ffffff',
-
-            font: 'DotGothic16',
-            fontSize: '14px',
-            fontWeight: '800',
-
-            cursor: 'pointer',
-          }}
-        >
+       <button type="button" style={buttonStyle}>
           find
         </button>
       </div>
       {/* 정류장 선택 드롭다운 */}
-      <div>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+          margin: '12px 0',
+          width: '100%',
+        }}
+      >
         <select
           defaultValue=""
           style={{
-            width: '220px',
-            height: '38px',
-            boxSizing: 'border-box',
-            padding: '0 12px',
-
-            border: '1px solid #555',
-            borderRadius: '6px',
-
-            backgroundColor: '#111',
-            color: '#ffffff',
-
-            font: 'inherit',
-            fontSize: '14px',
-            outline: 'none',
-            color: '#ffffff',
-
+            ...controlStyle,
+            flex: 1,
+            minWidth: 0,
+            padding: '0 10px',
           }}
         >
           <option value="" disabled>Select your station</option>
@@ -154,58 +160,72 @@ export default function App() {
           <option value="2">항목 2</option>
           <option value="3">항목 3</option>
         </select>
+        <button type="button" style={buttonStyle}>
+          find
+        </button>
       </div>
 
       <br/>
 
       <h2>{station}</h2>
       {lastUpdated && (
-        <p>Last updated: {lastUpdated.toLocaleTimeString()}</p>
+        <p style={{ fontSize: '15px', margin: '0 0 6px 0' }}>Last updated: {lastUpdated.toLocaleTimeString()}</p>
       )}
-      {error && <p>{error}</p>}
-      <div
+      {error && <p style={{ fontSize: '12px', margin: '0 0 6px 0' }}>{error}</p>}
+      <div // 전광판 영역
         style={{
-          width: '12cm', // 임시 테두리 크기
-          height: '4cm',
+          width: '100%',
+          aspectRatio: '3 / 1',
+          minHeight: '180px',
           boxSizing: 'border-box',
           overflow: 'hidden',
-          padding: '8px',
-          border: '1px solid #ffffff', // 화면에서 12x7cm 경계 잘 보이게 임시 테두리
+          padding: '8px 10px',
+         
           display: 'flex',
           flexDirection: 'column',
+          fontSize: 'clamp(16px, 3.3vw, 13px)',
         }}
       >
 
         {visibleRows.slice(0, 5).map((r, i) => (
-          <div key={i}>
-            <PixelVehicleIcon type={r.type}/>
-              <span // 오른쪽 정렬
+          <div key={i}
+            style={{
+            height: '20%',
+            display: 'flex',       // ⭐ 핵심: 한 줄의 모든 요소를 가로로 나란히 정렬
+            alignItems: 'center',  // 세로 중앙 정렬
+            gap: '8px',            // 각 요소 사이 여백 (공백 문자 대신 사용)
+            }}
+           >
+            <PixelVehicleIcon // 차량 아이콘  
+              style={{
+                paddingRight: '10px',
+              }}
+            type={r.type}/>
+              <span // 노선 번호
                 style={{
                   display: 'inline-block',
-                  width: '40px',
+                  width: '30px',
                   textAlign: 'right',
                 }}
               >
                 {r.line}
               </span>
-            {'\u00A0'.repeat(2)}
-            <span // 목적지가 고정 가로폭이 있어야 출발시간도 왼쪽 정렬이 먹힘
+            <span // 목적지
               style={{
-                display: 'inline-block',
-                width: '230px', // 내용이 고정폭 벗어날때 애니메이션 효과 주어야 함
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                verticalAlign: 'middle',
+                 flex: 1,
+                  minWidth: 0,        // 핵심: 이게 있어야 옆의 출발 시간을 밀어내지 않음
+                   whiteSpace: 'nowrap', // 두 줄로 줄바꿈 방지
+                   overflow: 'hidden',   // 넘치는 글자 숨김
               }}
             >
               {r.direction}
             </span>
-            {'\u00A0'.repeat(4)}
-            <span // 왼쪽 정렬
-                style={{
-                display: 'inline-block',
-                width: '40px',
-                textAlign: 'left',
+            <span // 출발 시간
+              style={{
+               flexShrink: 0,        // 목적지가 길어져도 너비가 찌그러지지 않음
+                minWidth: '45px',     // '12 min'이나 '14:25' 같은 글자가 안 잘리도록 넉넉히 확보
+                textAlign: 'right',   // 숫자 우측 정렬
+                whiteSpace: 'nowrap', // 시간 줄바꿈 방지
               }}
               >
             {r.minutes === 0 ? 'Sofort' : `${r.minutes}'`} 
