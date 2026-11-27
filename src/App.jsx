@@ -40,6 +40,7 @@ export default function App() {
 
   const [selectedStation, setSelectedStation] = useState(DEFAULT_STATION);
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchOption, setSearchOption] = useState('');
 
   const getValuefromSerach = (searchStation) => {
     if (!searchStation || searchStation.trim().length === 0){
@@ -50,6 +51,10 @@ export default function App() {
       alert(searchStation);
     }
   };
+
+  const getValuefromSelect = (selectedOption) => {
+    setSelectedStation(selectedOption); // ✅ state 변경 함수로 값 갱신 -> useEffect 자동 실행
+  }
 
   useEffect(() => {
     let cancelled = false;
@@ -163,6 +168,11 @@ export default function App() {
       >
         <select
           defaultValue=""
+          onChange={(e) => {
+            const value = e.target.value;
+            setSearchOption(value);
+            getValuefromSelect(value)
+          }}
           style={{
             ...controlStyle,
             flex: 1,
@@ -171,9 +181,9 @@ export default function App() {
           }}
         >
           <option value="" disabled>Select your station</option>
-          <option value="1">Essen Altenessen Bf (150m)</option>
-          <option value="2">Essen Onckenstr. (450m)</option>
-          <option value="3">Essen Uniklinikum (834m)</option>
+          <option value="Essen Altenessen Bf">Essen Altenessen Bf (150m)</option>
+          <option value="Essen Onckenstr.">Essen Onckenstr. (450m)</option>
+          <option value="Essen Uniklinikum">Essen Uniklinikum (834m)</option>
         </select>
         <button type="button" style={buttonStyle}>
           📍
