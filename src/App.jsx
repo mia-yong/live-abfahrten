@@ -14,7 +14,7 @@ const controlStyle = {
   border: '1px solid #555',
   borderRadius: '6px',
   backgroundColor: '#111',
-  color: '#ffffff',
+  color: '#757575',
   fontFamily: 'inherit',
   fontSize: '15px',
   outline: 'none',
@@ -202,10 +202,6 @@ export default function App() {
       <br/>
 
       <h2>{selectedStation}</h2>
-      {lastUpdated && (
-        <p style={{ fontSize: '15px', margin: '0 0 6px 0' }}>Last updated: {lastUpdated.toLocaleTimeString()}</p>
-      )}
-      {error && <p style={{ fontSize: '12px', margin: '0 0 6px 0' }}>{error}</p>}
       <div // 전광판 영역
         style={{
           width: '100%',
@@ -218,6 +214,8 @@ export default function App() {
           display: 'flex',
           flexDirection: 'column',
           fontSize: 'clamp(16px, 3.3vw, 13px)',
+          
+          border: 'dotted', //
         }}
       >
         {isLoading && visibleRows.length === 0 ? (
@@ -298,6 +296,13 @@ export default function App() {
             </span> 
           </div>
         ))}
+      </div>
+      <div
+        style={{ textAlign: 'right', paddingRight: '7px', paddingTop: '15px' }}>
+          {lastUpdated && (
+        <p style={{ fontSize: '15px', margin: '0 0 6px 0' }}>Last updated: {lastUpdated.toLocaleTimeString()}</p>
+      )}
+      {error && <p style={{ fontSize: '12px', margin: '0 0 6px 0' }}>{error}</p>}
       </div>
     </div>
   );
