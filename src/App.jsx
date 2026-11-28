@@ -35,9 +35,7 @@ export default function App() {
   const [error, setError] = useState(null); // 에러상태 초기화
   const [pageIndex, setPageIndex] = useState(0); // 현재 5개 묶음 번호 (0부터 시작)
 
-  const DEFAULT_STATION = 'Essen Altenessen Bf'; // 검색할 정류장 이름
-  //const station = 'Essen Onckenstr.'; // 검색할 정류장 이름
-  //const station = 'Essen Uniklinikum'; // 검색할 정류장 이름
+  const DEFAULT_STATION = 'Essen Hbf';
 
   const [selectedStation, setSelectedStation] = useState(DEFAULT_STATION);
   const [searchQuery, setSearchQuery] = useState('');
